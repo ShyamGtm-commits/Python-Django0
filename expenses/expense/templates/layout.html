@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Expense Tracker{% endblock %}</title>
+
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body>
+
+    <nav style="background:#222; padding:1rem;">
+        <a href="{% url 'expense_list' %}" style="color:white; margin-right:20px;">Home</a>
+        <a href="{% url 'create_expense' %}" style="color:white;">Add Expense</a>
+    </nav>
+
+    <div class="container" style="width:80%; margin:20px auto;">
+        {% block content %}
+        {% endblock %}
+    </div>
+
+</body>
+</html>
