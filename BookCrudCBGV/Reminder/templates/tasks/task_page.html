@@ -1,0 +1,49 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ task.title }} - Details</title>
+    <link rel="stylesheet" href="{% static 'css/task_page.css' %}">
+</head>
+
+<body>
+    <!-- Banner Section - Shows THIS task's banner -->
+    <div class="banner">
+        {% if task.banner %}
+            <img src="{{ task.banner.url }}" alt="{{ task.title }} Banner">
+             <p>Debug: {{ task.banner.url }}</p>
+        {% else %}
+            <p>No banner image uploaded</p>
+            <img src="{% static 'images/fallback.png' %}" alt="Default Banner">
+        {% endif %}
+    </div>
+
+    <!-- Main Content -->
+    <section class="container">
+        <h2>{{ task.title }}</h2>
+        
+        <div class="task-details">
+            <p><strong>Description:</strong> {{ task.description }}</p>
+            
+            <p><strong>Status:</strong>
+                {% if task.status == 'completed' %}
+                    <span class="badge completed">Completed</span>
+                {% else %}
+                    <span class="badge pending">Pending</span>
+                {% endif %}
+            </p>
+            
+            <p><strong>Created:</strong> Display creation date if you have it in model</p>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="actions">
+            <a href="{% url 'tasks:task_update' task.pk %}" class="edit-btn">Edit Task</a>
+            <a href="{% url 'tasks:task_delete' task.pk %}" class="delete-btn">Delete Task</a>
+            <a href="{% url 'tasks:task_list' %}" class="add-btn">Back to Task List</a>
+        </div>
+    </section>
+
+</body>
+</html>

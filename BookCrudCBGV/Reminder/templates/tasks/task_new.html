@@ -1,0 +1,18 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+New Task
+{% endblock %}
+
+{% block content %}
+<section>
+    <h1>New Task</h1>
+    
+    <form class="form-with-validation" action="{% url 'tasks:task_create' %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}  <!-- Changed 'from' to 'form' and added .as_p -->
+        
+        <button type="submit" class="form-submit">Create Task</button>
+    </form>
+</section>
+{% endblock %}

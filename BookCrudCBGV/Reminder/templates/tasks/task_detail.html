@@ -1,0 +1,41 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ task.title }}</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/task_page.css' %}">
+</head>
+<body>
+    <!-- Banner Section -->
+    <div class="banner">
+        {% if task.banner %}
+            <img src="{{ task.banner.url }}" alt="{{ task.title }}">
+        {% else %}
+            <img src="{% static 'images/fallback.png' %}" alt="Default Banner">
+        {% endif %}
+    </div>
+
+    <!-- Task Details -->
+    <section class="container">
+        <h1>{{ task.title }}</h1>
+        <p class="description">{{ task.description }}</p>
+        
+        <div class="status-section">
+            <strong>Status:</strong>
+            {% if task.status == 'completed' %}
+                <span class="badge completed">Completed</span>
+            {% else %}
+                <span class="badge pending">Pending</span>
+            {% endif %}
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="actions">
+            <a href="{% url 'tasks:task_update' task.id %}" class="edit-btn">Edit Task</a>
+            <a href="{% url 'tasks:task_delete' task.id %}" class="delete-btn">Delete Task</a>
+            <a href="{% url 'tasks:task_list' %}" class="back-btn">Back to Task List</a>
+        </div>
+    </section>
+</body>
+</html>

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Task Manager</title>
+    <!-- REMOVE the entire <style> block -->
+    <!-- Link to external CSS instead -->
+</head>
+<body>
+    <nav>
+        {% if user.is_authenticated %}
+        <!-- FIX: Change task_new to task_create -->
+        <a href="{% url 'tasks:task_create' %}">
+            <span role="img" aria-label="New Task" title="New Task">🆕 New Task</span>
+        </a>
+        <form class="logout" action="{% url 'users:logout' %}" method="post">
+            {% csrf_token %}
+            <button class="logout-button" aria-label="User logout" title="User Logout">🎬 Logout</button>
+        </form>
+        {% else %}
+            <a href="{% url 'users:register' %}">
+                <span role="img" aria-label="User Registration">🚀 Register</span>
+            </a> |
+            <a href="{% url 'users:login' %}">
+                <span role="img" aria-label="User Login" title="User Login">🔐 Login</span>
+            </a> 
+        {% endif %}
+    </nav>
+
+    {% block content %}{% endblock %}
+</body>
+</html>
