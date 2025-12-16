@@ -1,0 +1,39 @@
+{% load socialaccount %}
+
+<h1>Successfully Logged in as: {{ request.user.username }}</h1>
+
+<h2>hurrah: {{ request.user.username }}. Now you've done it.</h2>
+<h4>After so many attempts finally i was able to pull this method of allauth. Like Dayummm😮</h4>
+
+<a href="{% url 'account_logout' %}">Logout</a>
+
+<!-- Get social accounts for current user -->
+{% get_social_accounts request.user as accounts %}
+
+{% if accounts.google %}
+  {% for account in accounts.google %}
+    <img src="{{ account.get_avatar_url }}" alt="Google profile picture" width="100" />
+    <p>Google: {{ account.extra_data.name }}</p>
+    <p>Email: {{ account.extra_data.email }}</p>
+  {% endfor %}
+{% endif %}
+
+{% if accounts.github %}
+  {% for account in accounts.github %}
+    <img src="{{ account.get_avatar_url }}" alt="Github profile picture" width="100" />
+    <p>Github: {{ account.extra_data.login }}</p>
+    <p>Name: {{ account.extra_data.name }}</p>
+  {% endfor %}
+{% endif %}
+
+<!-- Show if user has no social accounts -->
+{% if not accounts.google and not accounts.github %}
+  <p>No social accounts linked to this user.</p>
+{% endif %}
+{% block content %}
+{% if messages %}
+{% for message in messages %}
+<p>{{ message }}</p>
+{% endfor %}
+{% endif %}
+{% endblock %}
