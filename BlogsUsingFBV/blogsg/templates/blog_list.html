@@ -236,10 +236,10 @@
                     
                     <p class="blog-description">{{ blog.description|truncatechars:150 }}</p>
                     
-                    {% comment %} <div class="blog-actions">
+                    <div class="blog-actions">
                         <a href="{% url 'blog_update' blog.id %}" class="action-btn edit-btn">✏️ Edit</a>
-                        <a href="{% url 'blog_delete' blog.id %}" class="action-btn delete-btn">🗑️ Delete</a>
-                    </div> {% endcomment %}
+                        {% comment %} <a href="{% url 'blog_delete' blog.id %}" class="action-btn delete-btn">🗑️ Delete</a> {% endcomment %}
+                    </div>
                 </div>
             </div>
             {% endfor %}
