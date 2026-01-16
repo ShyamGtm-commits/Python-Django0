@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% if form.instance.id %}Edit{% else %}Create{% endif %} Blog</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 700px;
+            margin: 40px auto;
+            background: white;
+            border-radius: 16px;
+            padding: 40px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+        }
+        
+        .form-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #eef2f7;
+        }
+        
+        .back-btn {
+            color: #667eea;
+            text-decoration: none;
+            font-size: 1.5rem;
+            padding: 5px 10px;
+            border-radius: 8px;
+            transition: background 0.3s;
+        }
+        
+        .back-btn:hover {
+            background: #f8f9fa;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            font-size: 2rem;
+            font-weight: 700;
+            flex: 1;
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #4a5568;
+            font-size: 0.95rem;
+        }
+        
+        .required::after {
+            content: " *";
+            color: #e53e3e;
+        }
+        
+        input[type="text"],
+        input[type="date"],
+        textarea {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: border 0.3s, box-shadow 0.3s;
+            background: #f8fafc;
+        }
+        
+        input[type="text"]:focus,
+        input[type="date"]:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            background: white;
+        }
+        
+        textarea {
+            min-height: 150px;
+            resize: vertical;
+            line-height: 1.5;
+        }
+        
+        input[type="file"] {
+            width: 100%;
+            padding: 12px;
+            border: 2px dashed #cbd5e0;
+            border-radius: 10px;
+            background: #f8fafc;
+            cursor: pointer;
+        }
+        
+        input[type="file"]:hover {
+            border-color: #667eea;
+            background: #edf2f7;
+        }
+        
+        .file-hint {
+            font-size: 0.85rem;
+            color: #718096;
+            margin-top: 5px;
+            display: block;
+        }
+        
+        .current-image {
+            margin-top: 10px;
+            padding: 15px;
+            background: #f8fafc;
+            border-radius: 8px;
+            border-left: 4px solid #48bb78;
+        }
+        
+        .current-image img {
+            max-width: 200px;
+            border-radius: 8px;
+            margin-top: 10px;
+        }
+        
+        .form-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 40px;
+            padding-top: 25px;
+            border-top: 2px solid #eef2f7;
+        }
+        
+        .submit-btn {
+            flex: 1;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 16px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        }
+        
+        .cancel-btn {
+            flex: 1;
+            background: #e2e8f0;
+            color: #4a5568;
+            padding: 16px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            text-align: center;
+            text-decoration: none;
+            transition: background 0.3s;
+        }
+        
+        .cancel-btn:hover {
+            background: #cbd5e0;
+        }
+        
+        .error-message {
+            color: #e53e3e;
+            font-size: 0.9rem;
+            margin-top: 5px;
+            padding: 10px;
+            background: #fed7d7;
+            border-radius: 6px;
+            border-left: 4px solid #e53e3e;
+        }
+        
+        .form-errors {
+            background: #fed7d7;
+            color: #c53030;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            border-left: 4px solid #e53e3e;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 25px;
+                margin: 20px;
+            }
+            
+            .form-actions {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="form-header">
+            <a href="{% url 'blog_list' %}" class="back-btn">←</a>
+            <h1>{% if form.instance.id %}✏️ Edit Blog Post{% else %}📝 Create New Blog{% endif %}</h1>
+        </div>
+        
+        {% if form.errors %}
+        <div class="form-errors">
+            <p>Please correct the errors below:</p>
+        </div>
+        {% endif %}
+        
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            
+            <div class="form-group">
+                <label for="id_title" class="required">Title</label>
+                {{ form.title }}
+                {% if form.title.errors %}
+                <div class="error-message">{{ form.title.errors }}</div>
+                {% endif %}
+            </div>
+            
+            <div class="form-group">
+                <label for="id_author" class="required">Author</label>
+                {{ form.author }}
+                {% if form.author.errors %}
+                <div class="error-message">{{ form.author.errors }}</div>
+                {% endif %}
+            </div>
+            
+            <div class="form-group">
+                <label for="id_description" class="required">Description</label>
+                {{ form.description }}
+                {% if form.description.errors %}
+                <div class="error-message">{{ form.description.errors }}</div>
+                {% endif %}
+            </div>
+            
+            <div class="form-group">
+                <label for="id_avatar" class="required">Author Avatar</label>
+                {{ form.avatar }}
+                <span class="file-hint">Recommended: Square image, at least 200x200 pixels</span>
+                {% if form.avatar.errors %}
+                <div class="error-message">{{ form.avatar.errors }}</div>
+                {% endif %}
+                {% if form.instance.avatar %}
+                <div class="current-image">
+                    <strong>Current Avatar:</strong><br>
+                    <img src="{{ form.instance.avatar.url }}" alt="Current avatar">
+                </div>
+                {% endif %}
+            </div>
+            
+            <div class="form-group">
+                <label for="id_image">Blog Image (Optional)</label>
+                {{ form.image }}
+                <span class="file-hint">Main blog image. Leave empty if none.</span>
+                {% if form.image.errors %}
+                <div class="error-message">{{ form.image.errors }}</div>
+                {% endif %}
+                {% if form.instance.image %}
+                <div class="current-image">
+                    <strong>Current Image:</strong><br>
+                    <img src="{{ form.instance.image.url }}" alt="Current blog image">
+                </div>
+                {% endif %}
+            </div>
+            
+            <div class="form-group">
+                <label for="id_date_created" class="required">Publication Date</label>
+                {{ form.date_created }}
+                {% if form.date_created.errors %}
+                <div class="error-message">{{ form.date_created.errors }}</div>
+                {% endif %}
+            </div>
+            
+            <div class="form-actions">
+                <button type="submit" class="submit-btn">
+                    {% if form.instance.id %}Update Blog{% else %}Create Blog{% endif %}
+                </button>
+                <a href="{% url 'blog_list' %}" class="cancel-btn">Cancel</a>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
