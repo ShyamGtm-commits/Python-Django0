@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delete Blog Post</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #fef2f2;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .delete-container {
+            max-width: 500px;
+            width: 100%;
+            background: white;
+            border-radius: 16px;
+            padding: 40px;
+            box-shadow: 0 10px 40px rgba(220, 38, 38, 0.1);
+            border: 2px solid #fecaca;
+        }
+        
+        .warning-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #fee2e2;
+        }
+        
+        .warning-icon {
+            font-size: 2.5rem;
+            color: #dc2626;
+        }
+        
+        h1 {
+            color: #dc2626;
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+        
+        .blog-preview {
+            background: #fef2f2;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 30px;
+            border-left: 4px solid #dc2626;
+        }
+        
+        .blog-title {
+            color: #1f2937;
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+        
+        .blog-meta {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+            font-size: 0.9rem;
+            color: #6b7280;
+        }
+        
+        .blog-description {
+            color: #4b5563;
+            line-height: 1.5;
+            margin-top: 10px;
+        }
+        
+        .warning-message {
+            background: #fef3c7;
+            color: #92400e;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            border-left: 4px solid #f59e0b;
+        }
+        
+        .warning-message strong {
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .delete-actions {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .delete-form {
+            flex: 1;
+        }
+        
+        .delete-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+            color: white;
+            padding: 16px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .delete-btn:hover {
+            background: linear-gradient(135deg, #b91c1c 0%, #991b1b 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(220, 38, 38, 0.3);
+        }
+        
+        .cancel-btn {
+            flex: 1;
+            background: #e5e7eb;
+            color: #4b5563;
+            padding: 16px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            text-align: center;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .cancel-btn:hover {
+            background: #d1d5db;
+            transform: translateY(-2px);
+        }
+        
+        .image-preview {
+            margin-top: 15px;
+            text-align: center;
+        }
+        
+        .image-preview img {
+            max-width: 200px;
+            border-radius: 8px;
+            border: 2px solid #fecaca;
+        }
+        
+        @media (max-width: 768px) {
+            .delete-container {
+                padding: 25px;
+                margin: 15px;
+            }
+            
+            .delete-actions {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="delete-container">
+        <div class="warning-header">
+            <div class="warning-icon">⚠️</div>
+            <h1>Delete Blog Post</h1>
+        </div>
+        
+        <div class="blog-preview">
+            <h2 class="blog-title">{{ blog.title }}</h2>
+            
+            <div class="blog-meta">
+                <span>👤 {{ blog.author }}</span>
+                <span>📅 {{ blog.date_created|date:"M d, Y" }}</span>
+            </div>
+            
+            <p class="blog-description">{{ blog.description|truncatewords:30 }}</p>
+            
+            {% if blog.image %}
+            <div class="image-preview">
+                <img src="{{ blog.image.url }}" alt="{{ blog.title }}">
+            </div>
+            {% endif %}
+        </div>
+        
+        <div class="warning-message">
+            <strong>⚠️ This action cannot be undone!</strong>
+            <p>Once deleted, this blog post will be permanently removed from the database.</p>
+        </div>
+        
+        <div class="delete-actions">
+            <form method="post" class="delete-form">
+                {% csrf_token %}
+                <button type="submit" class="delete-btn">🗑️ Yes, Delete Permanently</button>
+            </form>
+            <a href="{% url 'blog_list' %}" class="cancel-btn">← Cancel & Go Back</a>
+        </div>
+    </div>
+</body>
+</html>

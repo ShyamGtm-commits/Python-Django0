@@ -6,7 +6,7 @@ from .forms import blogForm
 
 
 def BlogsView(request):
-    blogs = blog.objects.all()
+    blogs = blog.objects.all().order_by('date_created')
     return render(request, 'blog_list.html', {'blogs': blogs})
 
 
@@ -37,3 +37,12 @@ def BlogsUpdate(request, pk):
 
     return render(request, 'blog_form.html', {'form': form})
 
+
+def BlogDelete(request, pk):
+    blog_instance = get_object_or_404(blog, pk=pk)
+
+    if request.method == "POST":
+        blog_instance.delete()
+        return redirect('blog_list')
+
+    return render(request, 'blog_confirm_delete.html', {'blog': blog_instance})
